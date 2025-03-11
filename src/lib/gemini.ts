@@ -69,7 +69,6 @@ export async function verifyNews(text: string, category: string) {
     Then verify the News Content against the provided news context and the specified category.
     If the news content doesn't match the given category, note that the user-given category doesn't match then say invalid category selected.
     Analyze credibility based on matches with the news context, source reliability, and content consistency.
-    If there is no context available, then say no recent news data available or selected category is invalid.
     Include the list of sources from the news context in the "sourceandrelated" field, starting with "${sourcesText}".
     Respond with ONLY a JSON object in this exact format:
 
@@ -84,7 +83,17 @@ export async function verifyNews(text: string, category: string) {
       "sourceandrelated": (string, 2-4 sentences starting with "${sourcesText}"),
       "potentialBiases": (array of 1-3 strings),
       "recommendation": (string)
-    }`;
+    }
+      
+    if newscontext is null then:
+    {
+      "trustScore": 0,
+      "analysis": "No recent news data available or selected category is invalid",
+      "sourceandrelated": "",
+      "potentialBiases": [],
+      "recommendation": ""
+    }
+    `;
 
     const result = await model.generateContent(prompt);
     const response = await result.response;
