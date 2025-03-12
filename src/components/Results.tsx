@@ -1,4 +1,3 @@
-import React from 'react';
 import { CheckCircle, XCircle, AlertTriangle } from 'lucide-react';
 
 interface ResultsProps {
@@ -47,7 +46,7 @@ export default function Results({ results }: ResultsProps) {
   const shortenUrl = (url: string) => {
     try {
       const { hostname } = new URL(url);
-      return hostname.replace('www.', ''); // e.g., "example.com"
+      return hostname.replace('www.', '');
     } catch {
       return url; // Fallback to raw URL if parsing fails
     }

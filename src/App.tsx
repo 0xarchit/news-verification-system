@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { NewspaperIcon } from 'lucide-react';
 import NewsForm from './components/NewsForm';
 import Results from './components/Results';
@@ -7,10 +7,22 @@ import AddToHomeScreen from './AddToHomeScreen';
 
 function App() {
   const [loading, setLoading] = useState(false);
-  const [results, setResults] = useState(null);
+  const [results, setResults] = useState<{
+    trustScore: number;
+    analysis: string;
+    sourceandrelated: string;
+    potentialBiases: string[];
+    recommendation: string;
+  } | null>(null);
   const [error, setError] = useState<string | null>(null);
 
-  const handleSubmit = async ({ source, category, type }) => {
+  interface SubmitParams {
+    source: string;
+    category: string;
+    type: 'text' | 'link';
+  }
+
+  const handleSubmit = async ({ source, category }: SubmitParams) => {
     setError(null);
     try {
       setLoading(true);
