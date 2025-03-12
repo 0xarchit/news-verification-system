@@ -22,11 +22,23 @@ function App() {
     type: 'text' | 'link';
   }
 
-  const handleSubmit = async ({ source, category }: SubmitParams) => {
+  const handleSubmit = async ({ source, category, type }: SubmitParams) => {
     setError(null);
+    const cacheKey = `${type}-${category}-${source}`;
+    const cachedResult = sessionStorage.getItem(cacheKey);
+
+    if (cachedResult) {
+      // Use cached result if available
+      setResults(JSON.parse(cachedResult));
+      setLoading(false);
+      return;
+    }
+
     try {
       setLoading(true);
       const verificationResults = await verifyNews(source, category);
+      // Cache the result in sessionStorage
+      sessionStorage.setItem(cacheKey, JSON.stringify(verificationResults));
       setResults(verificationResults);
     } catch (error) {
       setError(error instanceof Error ? error.message : 'An unexpected error occurred');
@@ -34,6 +46,12 @@ function App() {
     } finally {
       setLoading(false);
     }
+  };
+
+  const handleCachedResult = (cachedResult: any) => {
+    setResults(cachedResult);
+    setLoading(false);
+    setError(null);
   };
 
   return (
@@ -55,7 +73,7 @@ function App() {
         {/* News Form Section */}
         <section className="bg-white rounded-lg shadow-lg p-8 mb-8 hover:shadow-xl transition-shadow">
           <h2 className="text-xl font-bold text-gray-800 mb-4">Submit a News Article</h2>
-          <NewsForm onSubmit={handleSubmit} />
+          <NewsForm onSubmit={handleSubmit} onCachedResult={handleCachedResult} />
         </section>
 
         {/* Error Message */}

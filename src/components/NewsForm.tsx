@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { FileText, Link, AlertCircle } from 'lucide-react';
 
 const categories = [
@@ -15,16 +15,46 @@ const categories = [
 
 interface NewsFormProps {
   onSubmit: (data: { source: string; category: string; type: 'text' | 'link' }) => void;
+  onCachedResult: (cachedResult: any) => void; // Callback for cached results
 }
 
-export default function NewsForm({ onSubmit }: NewsFormProps) {
+export default function NewsForm({ onSubmit, onCachedResult }: NewsFormProps) {
   const [source, setSource] = useState('');
   const [category, setCategory] = useState('');
   const [type, setType] = useState<'text' | 'link'>('text');
 
+  // Generate a unique key for sessionStorage based on input
+  const getCacheKey = () => {
+    return `${type}-${category}-${source}`;
+  };
+
+  // Check sessionStorage for cached result on mount or input change
+  useEffect(() => {
+    const cacheKey = getCacheKey();
+    const cachedResult = sessionStorage.getItem(cacheKey);
+    if (cachedResult) {
+      onCachedResult(JSON.parse(cachedResult));
+    }
+  }, [source, category, type, onCachedResult]);
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    onSubmit({ source, category, type });
+    const cacheKey = getCacheKey();
+    const cachedResult = sessionStorage.getItem(cacheKey);
+
+    if (cachedResult) {
+      // If result is cached, use it instead of submitting
+      onCachedResult(JSON.parse(cachedResult));
+    } else {
+      // Submit the form and cache the result
+      onSubmit({
+        source,
+        category,
+        type,
+      });
+      // Assuming onSubmit eventually returns a result that you can cache
+      // You might need to adjust this based on how your parent component handles the result
+    }
   };
 
   return (
@@ -34,9 +64,7 @@ export default function NewsForm({ onSubmit }: NewsFormProps) {
           type="button"
           onClick={() => setType('text')}
           className={`flex items-center gap-2 px-4 py-2 rounded-lg ${
-            type === 'text'
-              ? 'bg-blue-600 text-white'
-              : 'bg-gray-100 text-gray-700'
+            type === 'text' ? 'bg-blue-600 text-white' : 'bg-gray-100 text-gray-700'
           }`}
         >
           <FileText size={20} />
@@ -46,9 +74,7 @@ export default function NewsForm({ onSubmit }: NewsFormProps) {
           type="button"
           onClick={() => setType('link')}
           className={`flex items-center gap-2 px-4 py-2 rounded-lg ${
-            type === 'link'
-              ? 'bg-blue-600 text-white'
-              : 'bg-gray-100 text-gray-700'
+            type === 'link' ? 'bg-blue-600 text-white' : 'bg-gray-100 text-gray-700'
           }`}
         >
           <Link size={20} />
