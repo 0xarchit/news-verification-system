@@ -5,7 +5,7 @@ const categories = [
   'education',
   'finance',
   'politics',
-  'international',
+  'world',
   'india',
   'tech',
   'entertainment',
