@@ -16,9 +16,11 @@
     "cors": "^2.8.5",
     "dotenv": "^16.0.3",
     "express": "^4.18.2",
+    "framer-motion": "^12.7.0",
     "lucide-react": "^0.344.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
+    "react-router-dom": "^7.5.0",
     "vite-plugin-pwa": "^0.21.1"
   },
   "devDependencies": {
