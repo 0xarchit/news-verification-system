@@ -24,11 +24,11 @@ https://news-verification-system.pages.dev
 ```
 
 ## Screenshots
-![Landing Page](Public/FakeNews/landing.png)
+![Landing Page](public/FakeNews/landing.png)
 
-![Main Interface](Public/FakeNews/main.png)
+![Main Interface](public/FakeNews/main.png)
 
-![App Install PopUp](Public/FakeNews/install.png)
+![App Install PopUp](public/FakeNews/install.png)
 
 ## Architecture
 
