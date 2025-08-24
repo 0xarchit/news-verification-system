@@ -1,0 +1,49 @@
+{
+    "version": 2,
+    "builds": [
+        {
+            "src": "api/**/*.js",
+            "use": "@vercel/node"
+        }
+    ],
+    "routes": [
+        {
+            "src": "/api/verify-news",
+            "methods": [
+                "POST"
+            ],
+            "dest": "api/verify-news.js"
+        },
+        {
+            "src": "/api/verify-news",
+            "methods": [
+                "OPTIONS"
+            ],
+            "dest": "api/verify-news.js",
+            "headers": {
+                "Access-Control-Allow-Origin": "https://06c7b1e7.news-verification-system.pages.dev/",
+                "Access-Control-Allow-Methods": "POST, OPTIONS",
+                "Access-Control-Allow-Headers": "Content-Type"
+            }
+        },
+        {
+            "src": "/api/health",
+            "methods": [
+                "GET"
+            ],
+            "dest": "api/health.js"
+        },
+        {
+            "src": "/api/health",
+            "methods": [
+                "OPTIONS"
+            ],
+            "dest": "api/health.js",
+            "headers": {
+                "Access-Control-Allow-Origin": "https://06c7b1e7.news-verification-system.pages.dev/",
+                "Access-Control-Allow-Methods": "GET, OPTIONS",
+                "Access-Control-Allow-Headers": "Content-Type"
+            }
+        }
+    ]
+}

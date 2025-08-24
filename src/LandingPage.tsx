@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { motion, useInView, useScroll, useTransform } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { 
@@ -8,6 +8,9 @@ import {
 import AddToHomeScreen from './AddToHomeScreen';
 
 export default function LandingPage() {
+  // Backend inactivity notice state
+  const [showBackendNotice, setShowBackendNotice] = useState(false);
+
   const { scrollYProgress } = useScroll();
   const scale = useTransform(scrollYProgress, [0, 1], [1, 0.8]);
 
@@ -21,6 +24,15 @@ export default function LandingPage() {
   const ctaInView = useInView(ctaRef, { once: true, amount: 0.3 });
 
   useEffect(() => {
+    // Show backend inactivity notice once per browser (until dismissed permanently)
+    try {
+      const hidden = localStorage.getItem('backendNoticeHidden');
+      if (!hidden) setShowBackendNotice(true);
+    } catch {
+      // If localStorage is unavailable, still show the notice
+      setShowBackendNotice(true);
+    }
+
     // Add smooth scrolling to all links
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
       anchor.addEventListener('click', (e) => {
@@ -37,6 +49,54 @@ export default function LandingPage() {
 
   return (
     <div className="bg-gray-50 overflow-x-hidden">
+      {/* Backend inactivity popup */}
+      {showBackendNotice && (
+        <motion.div
+          className="fixed inset-0 z-50 flex items-center justify-center p-4"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+        >
+          <div
+            className="absolute inset-0 bg-black/50"
+            onClick={() => setShowBackendNotice(false)}
+          />
+          <motion.div
+            className="relative z-10 w-full max-w-md rounded-2xl bg-white p-5 sm:p-6 shadow-2xl"
+            initial={{ y: 20, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            transition={{ type: 'spring', stiffness: 260, damping: 20 }}
+            role="dialog"
+            aria-modal="true"
+            aria-label="Notice about backend availability"
+          >
+            <div className="mb-3 text-center">
+              <h3 className="text-lg font-bold text-gray-900">Heads up</h3>
+            </div>
+            <p className="text-sm text-gray-700 mb-5 text-center">
+              Backend logic may occasionally fail due to inactivity/limited maintenance of this college project. If a request fails, please try again later.
+            </p>
+            <div className="flex flex-col sm:flex-row gap-3 justify-center">
+              <button
+                className="inline-flex items-center justify-center rounded-full bg-blue-600 px-4 py-2 text-white font-medium hover:bg-blue-700 transition-colors"
+                onClick={() => setShowBackendNotice(false)}
+              >
+                Got it
+              </button>
+              <button
+                className="inline-flex items-center justify-center rounded-full border border-gray-300 px-4 py-2 text-gray-700 font-medium hover:bg-gray-50 transition-colors"
+                onClick={() => {
+                  try { localStorage.setItem('backendNoticeHidden', '1'); } catch {}
+                  setShowBackendNotice(false);
+                }}
+              >
+                Don't show again
+              </button>
+            </div>
+          </motion.div>
+        </motion.div>
+      )}
+
       {/* Hero Section - Full screen with parallax effect */}
       <motion.section
         style={{ scale }}

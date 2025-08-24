@@ -11,7 +11,7 @@ node_modules
 dist
 dist-ssr
 *.local
-.env
+# .env
 .gitignore
 
 # Editor directories and files
@@ -25,6 +25,4 @@ dist-ssr
 *.sln
 *.sw?
 **/*.env
-server
-Fastapi-vercel
-local-server
+__pycache__
