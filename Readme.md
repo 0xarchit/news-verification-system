@@ -26,11 +26,12 @@ https://news-verify.0xarchit.is-a.dev
 ```
 
 ## Screenshots
-![Landing Page](public/FakeNews/landing.png)
+![Landing Page](public/FakeNews/landing.png)  
+![App Install PopUp](public/FakeNews/install.png)  
+<img width="1879" height="1079" alt="image" src="https://github.com/user-attachments/assets/d3398145-fa68-4e11-9e4e-935438c5f4c7" />  
+<img width="1888" height="1079" alt="image" src="https://github.com/user-attachments/assets/7df027d6-d110-40d9-9364-bf29ae0f3cb0" />
 
-![Main Interface](public/FakeNews/main.png)
 
-![App Install PopUp](public/FakeNews/install.png)
 
 ## Architecture
 
